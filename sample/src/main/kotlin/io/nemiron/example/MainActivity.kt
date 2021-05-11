@@ -3,6 +3,7 @@ package io.nemiron.example
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import io.nemiron.storetk.serializer.KotlinxCborSerializer
 import io.nemiron.storetk.serializer.KotlinxJsonSerializer
 import io.nemiron.storetk.serializer.KotlinxProtoBufSerializer
 import kotlinx.serialization.Serializable
@@ -25,9 +26,12 @@ class MainActivity : AppCompatActivity() {
         /*testJsonSerializableClass()
         testJsonIntData()
         testJsonNonSerializableClass()*/
-        testProtoBufSerializableClass()
+        /*testProtoBufSerializableClass()
         testProtoBufIntData()
-        testProtoBufNonSerializableClass()
+        testProtoBufNonSerializableClass()*/
+        testCborSerializableClass()
+        testCborIntData()
+        testCborNonSerializableClass()
     }
 
     private fun testJsonSerializableClass() {
@@ -84,7 +88,39 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun testProtoBufIntData() {
-        val serializer = KotlinxProtoBufSerializer()
+        val serializer = KotlinxCborSerializer()
+        val testInt = 1337
+        val serializedInt = serializer.serialize(testInt)
+        val deserializedInt = serializer.deserialize(serializedInt, Int::class)
+
+        Log.i(TAG, "testInt = $testInt")
+        Log.i(TAG, "serializedInt = $serializedInt")
+        Log.i(TAG, "deserializedInt = $deserializedInt")
+    }
+
+    private fun testCborSerializableClass() {
+        val serializer = KotlinxCborSerializer()
+        val testData = TestData("ISCS EAZY!!!")
+        val serializedData = serializer.serialize(testData)
+        val deserializedData = serializer.deserialize(serializedData, TestData::class)
+
+        Log.i(TAG, "testData = $testData")
+        Log.i(TAG, "serializedData = $serializedData")
+        Log.i(TAG, "deserializedData = $deserializedData")
+    }
+
+    private fun testCborNonSerializableClass() {
+        val serializer = KotlinxCborSerializer()
+        try {
+            val wrongData = WrongData("ISCS EAZY!!!")
+            serializer.serialize(wrongData)
+        } catch (e: Exception) {
+            Log.e(TAG, "exception: $e")
+        }
+    }
+
+    private fun testCborIntData() {
+        val serializer = KotlinxCborSerializer()
         val testInt = 1337
         val serializedInt = serializer.serialize(testInt)
         val deserializedInt = serializer.deserialize(serializedInt, Int::class)

@@ -47,6 +47,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$serializationVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-cbor:$serializationVersion"
 
     implementation project(':store-tink')
 
