@@ -1,6 +1,7 @@
 package io.nemiron.storetk.serializer
 
 import io.nemiron.storetk.common.Data
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
@@ -10,7 +11,8 @@ class KotlinxJsonSerializer(
 ) : StoreTkSerializer {
 
     override fun <T : Any> serialize(value: T): Data {
-        val classSerializer = value::class.serializer()
+        @Suppress("UNCHECKED_CAST")
+        val classSerializer = value::class.serializer() as KSerializer<T>
         val serializedBytes = json.encodeToString(classSerializer, value).encodeToByteArray()
         serializedBytes.decodeToString()
 
