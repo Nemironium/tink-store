@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 android {
@@ -23,15 +24,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     sourceSets {
         main.java.srcDirs += "src/main/kotlin"
         test.java.srcDirs += "src/test/kotlin"
+    }
+
+    kotlinOptions {
+        freeCompilerArgs += "-Xuse-experimental=kotlinx.serialization.InternalSerializationApi"
     }
 }
 
 ext {
     tinkVersion = "1.5.0"
     coroutinesVersion = "1.5.0-RC"
+    serializationVersion = "1.2.0"
 }
 
 dependencies {
@@ -39,6 +46,10 @@ dependencies {
     implementation "com.google.crypto.tink:tink-android:$tinkVersion"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$serializationVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-cbor:$serializationVersion"
 
     testImplementation "junit:junit:4.13.2"
 }
