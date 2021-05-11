@@ -32,6 +32,7 @@ android {
 
     kotlinOptions {
         freeCompilerArgs += "-Xuse-experimental=kotlinx.serialization.InternalSerializationApi"
+        freeCompilerArgs += "-Xuse-experimental=kotlinx.serialization.ExperimentalSerializationApi"
     }
 }
 
