@@ -2,6 +2,7 @@ package io.nemiron.storetk.serializer
 
 import io.nemiron.storetk.common.Data
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
 class KotlinxJsonSerializer(
@@ -9,11 +10,7 @@ class KotlinxJsonSerializer(
 ) : StoreTkSerializer {
 
     override fun <T : Any> serialize(value: T): Data {
-        val classSerializer = value.javaClass.serializer
-        requireNotNull(classSerializer) {
-            "Class must have @Serializable annotation"
-        }
-
+        val classSerializer = value::class.serializer()
         val serializedBytes = json.encodeToString(classSerializer, value).encodeToByteArray()
         serializedBytes.decodeToString()
 
@@ -21,13 +18,8 @@ class KotlinxJsonSerializer(
     }
 
     override fun <T : Any> deserialize(data: Data, kClass: KClass<T>): T {
-        //TODO: see kClass.serializer()
-        val classSerializer = kClass.java.serializer
-        requireNotNull(classSerializer) {
-            "Class must have @Serializable annotation"
-        }
+        val classSerializer = kClass.serializer()
         val serializedJsonString = data.value.decodeToString()
-
         return json.decodeFromString(classSerializer, serializedJsonString)
     }
 }
