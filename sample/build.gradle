@@ -1,7 +1,7 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'org.jetbrains.kotlin.plugin.serialization'
+    id "com.android.application"
+    id "kotlin-android"
+    id "org.jetbrains.kotlin.plugin.serialization"
 }
 
 android {
@@ -21,7 +21,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
 
@@ -37,6 +37,8 @@ android {
 
 ext {
     serializationVersion = "1.2.0"
+    datastoreVersion = "1.0.0-beta01"
+    coroutinesVersion = "1.5.0-RC"
 }
 
 dependencies {
@@ -49,7 +51,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$serializationVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-cbor:$serializationVersion"
 
-    implementation project(':store-tink')
+    implementation project(":store-tink")
 
     testImplementation "junit:junit:4.13.2"
     androidTestImplementation "androidx.test.ext:junit:1.1.2"

@@ -3,9 +3,10 @@ package io.nemiron.example
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import io.nemiron.storetk.serializer.KotlinxCborSerializer
-import io.nemiron.storetk.serializer.KotlinxJsonSerializer
-import io.nemiron.storetk.serializer.KotlinxProtoBufSerializer
+import io.nemiron.storetk.serializer.datastore.DataStoreProtoBufSerializer
+import io.nemiron.storetk.serializer.kotlinx.KotlinxCborSerializer
+import io.nemiron.storetk.serializer.kotlinx.KotlinxJsonSerializer
+import io.nemiron.storetk.serializer.kotlinx.KotlinxProtoBufSerializer
 import kotlinx.serialization.Serializable
 
 class MainActivity : AppCompatActivity() {
@@ -29,9 +30,11 @@ class MainActivity : AppCompatActivity() {
         /*testProtoBufSerializableClass()
         testProtoBufIntData()
         testProtoBufNonSerializableClass()*/
-        testCborSerializableClass()
+        /*testCborSerializableClass()
         testCborIntData()
-        testCborNonSerializableClass()
+        testCborNonSerializableClass()*/
+        testDataStoreProtobufString()
+        testDataStoreProtobufNonSerializableClass()
     }
 
     private fun testJsonSerializableClass() {
@@ -128,5 +131,26 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG, "testInt = $testInt")
         Log.i(TAG, "serializedInt = $serializedInt")
         Log.i(TAG, "deserializedInt = $deserializedInt")
+    }
+
+    private fun testDataStoreProtobufString() {
+        val serializer = DataStoreProtoBufSerializer()
+        val testString = "ISCS EAZY!!!"
+        val serializedData = serializer.serialize(testString)
+        val deserializedData = serializer.deserialize(serializedData, testString::class)
+
+        Log.i(TAG, "testData = $testString")
+        Log.i(TAG, "serializedData = $serializedData")
+        Log.i(TAG, "deserializedData = $deserializedData")
+    }
+
+    private fun testDataStoreProtobufNonSerializableClass() {
+        val serializer = DataStoreProtoBufSerializer()
+        try {
+            val wrongData = WrongData("ISCS EAZY!!!")
+            serializer.serialize(wrongData)
+        } catch (e: Exception) {
+            Log.e(TAG, "exception: $e")
+        }
     }
 }
