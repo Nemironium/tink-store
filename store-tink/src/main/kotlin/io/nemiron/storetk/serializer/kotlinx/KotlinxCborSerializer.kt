@@ -1,6 +1,7 @@
-package io.nemiron.storetk.serializer
+package io.nemiron.storetk.serializer.kotlinx
 
 import io.nemiron.storetk.common.Data
+import io.nemiron.storetk.serializer.StoreTkSerializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.serializer
