@@ -1,6 +1,8 @@
 package io.nemiron.storetk.serializer.datastore
 
-import io.nemiron.storetk.common.Data
+
+import com.google.protobuf.ExperimentalApi
+import io.nemiron.storetk.core.Data
 import io.nemiron.storetk.serializer.StoreTkSerializer
 import io.nemiron.storetk.serializer.datastore.proto.StoreTkProto.*
 import io.nemiron.storetk.serializer.datastore.proto.toAnyValue
@@ -10,7 +12,8 @@ import kotlin.reflect.KClass
 /*
 * TODO: allow serialize Any class with Any fields
 * */
-class DataStoreProtoBufSerializer : StoreTkSerializer {
+@ExperimentalApi("Currently doesn't allow serialize Any class with Any fields")
+object GoogleProtoBufSerializer : StoreTkSerializer {
 
     override fun <T : Any> serialize(value: T): Data {
         val serializedBytes = StoreTk
