@@ -1,8 +1,7 @@
-package io.nemiron.storetk.serializer.datastore.proto
+package io.nemiron.storetk.serializer.google.proto
 
-import io.nemiron.storetk.serializer.datastore.proto.StoreTkProto.Value
-import io.nemiron.storetk.serializer.datastore.proto.StoreTkProto.Value.Type
-import io.nemiron.storetk.serializer.datastore.proto.StoreTkProto.Value.Type.*
+import io.nemiron.storetk.serializer.google.proto.StoreTkData.*
+import io.nemiron.storetk.serializer.google.proto.StoreTkData.Value.Type.*
 import kotlin.reflect.KClass
 
 internal fun Any.toProtoValue(): Value =
@@ -34,7 +33,7 @@ internal fun <T : Any> Value.toAnyValue(kClass: KClass<T>): T {
         ?: throw TypeCastException("Cannot transform protobuf bytes to type ${kClass.qualifiedName}")
 }
 
-internal fun Type.toSingleValue(): Any =
+internal fun Value.Type.toSingleValue(): Any =
     when (typeCase) {
         TypeCase.DOUBLE_VALUE -> doubleValue
         TypeCase.FLOAT_VALUE -> floatValue
@@ -45,10 +44,10 @@ internal fun Type.toSingleValue(): Any =
         else -> throw TypeCastException("Protobuf type not supported: $typeCase")
     }
 
-internal fun List<Type>.toListValue(): List<Any> =
+internal fun List<Value.Type>.toListValue(): List<Any> =
     mapNotNull { it.toSingleValue() }
 
-private fun getProtoType(value: Any): Type =
+private fun getProtoType(value: Any): Value.Type =
     newBuilder()
         .apply {
             when (value) {

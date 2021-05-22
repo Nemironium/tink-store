@@ -27,8 +27,10 @@ android {
     }
 
     sourceSets {
-        main.java.srcDirs += "src/main/kotlin"
-        main.java.srcDirs += "${protobuf.generatedFilesBaseDir}/main/java"
+        main {
+            java.srcDirs += "src/main/kotlin"
+            proto.srcDirs += "src/main/kotlin/io/nemiron/storetk/serializer/google/proto"
+        }
         test.java.srcDirs += "src/test/kotlin"
     }
 
