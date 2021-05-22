@@ -3,11 +3,7 @@ package io.nemiron.example
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import io.nemiron.storetk.serializer.datastore.DataStoreProtoBufSerializer
-import io.nemiron.storetk.serializer.kotlinx.KotlinxCborSerializer
-import io.nemiron.storetk.serializer.kotlinx.KotlinxJsonSerializer
-import io.nemiron.storetk.serializer.kotlinx.KotlinxProtoBufSerializer
-import kotlinx.serialization.Serializable
+import androidx.lifecycle.lifecycleScope
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,142 +11,26 @@ class MainActivity : AppCompatActivity() {
         private const val TAG = "STORE_KT"
     }
 
-    @Serializable
-    data class TestData(val value: String)
-    
-    data class WrongData(val value: String)
+    private val dataManager: DataManager by lazy { DataManager(application) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        /*testJsonSerializableClass()
-        testJsonIntData()
-        testJsonNonSerializableClass()*/
-        /*testProtoBufSerializableClass()
-        testProtoBufIntData()
-        testProtoBufNonSerializableClass()*/
-        /*testCborSerializableClass()
-        testCborIntData()
-        testCborNonSerializableClass()*/
-        testDataStoreProtobufString()
-        testDataStoreProtobufNonSerializableClass()
-    }
+        lifecycleScope.launchWhenCreated {
+            val testData = TestData("Ибкс -- эт окруто!!!")
+            dataManager.saveTestData(testData)
+            val retrievedTestData = dataManager.getTestData()
 
-    private fun testJsonSerializableClass() {
-        val serializer = KotlinxJsonSerializer()
-        val testData = TestData("ISCS EAZY!!!")
-        val serializedData = serializer.serialize(testData)
-        val deserializedData = serializer.deserialize(serializedData, TestData::class)
+            Log.i(TAG, "testData = $testData")
+            Log.i(TAG, "retrievedTestData = $retrievedTestData")
 
-        Log.i(TAG, "testData = $testData")
-        Log.i(TAG, "serializedData = $serializedData")
-        Log.i(TAG, "deserializedData = $deserializedData")
-    }
+            val testString = "ISCS EAZY!!!ISCS EAZY!!!ISCS EAZY!!!"
+            dataManager.saveString(testString)
+            val retrievedTestString = dataManager.getString()
 
-    private fun testJsonNonSerializableClass() {
-        val serializer = KotlinxJsonSerializer()
-        try {
-            val wrongData = WrongData("ISCS EAZY!!!")
-            serializer.serialize(wrongData)
-        } catch (e: Exception) {
-            Log.e(TAG, "exception: $e")
-        }
-    }
-
-    private fun testJsonIntData() {
-        val serializer = KotlinxJsonSerializer()
-        val testInt = 1337
-        val serializedInt = serializer.serialize(testInt)
-        val deserializedInt = serializer.deserialize(serializedInt, Int::class)
-
-        Log.i(TAG, "testInt = $testInt")
-        Log.i(TAG, "serializedInt = $serializedInt")
-        Log.i(TAG, "deserializedInt = $deserializedInt")
-    }
-
-    private fun testProtoBufSerializableClass() {
-        val serializer = KotlinxProtoBufSerializer()
-        val testData = TestData("ISCS EAZY!!!")
-        val serializedData = serializer.serialize(testData)
-        val deserializedData = serializer.deserialize(serializedData, TestData::class)
-
-        Log.i(TAG, "testData = $testData")
-        Log.i(TAG, "serializedData = $serializedData")
-        Log.i(TAG, "deserializedData = $deserializedData")
-    }
-
-    private fun testProtoBufNonSerializableClass() {
-        val serializer = KotlinxProtoBufSerializer()
-        try {
-            val wrongData = WrongData("ISCS EAZY!!!")
-            serializer.serialize(wrongData)
-        } catch (e: Exception) {
-            Log.e(TAG, "exception: $e")
-        }
-    }
-
-    private fun testProtoBufIntData() {
-        val serializer = KotlinxCborSerializer()
-        val testInt = 1337
-        val serializedInt = serializer.serialize(testInt)
-        val deserializedInt = serializer.deserialize(serializedInt, Int::class)
-
-        Log.i(TAG, "testInt = $testInt")
-        Log.i(TAG, "serializedInt = $serializedInt")
-        Log.i(TAG, "deserializedInt = $deserializedInt")
-    }
-
-    private fun testCborSerializableClass() {
-        val serializer = KotlinxCborSerializer()
-        val testData = TestData("ISCS EAZY!!!")
-        val serializedData = serializer.serialize(testData)
-        val deserializedData = serializer.deserialize(serializedData, TestData::class)
-
-        Log.i(TAG, "testData = $testData")
-        Log.i(TAG, "serializedData = $serializedData")
-        Log.i(TAG, "deserializedData = $deserializedData")
-    }
-
-    private fun testCborNonSerializableClass() {
-        val serializer = KotlinxCborSerializer()
-        try {
-            val wrongData = WrongData("ISCS EAZY!!!")
-            serializer.serialize(wrongData)
-        } catch (e: Exception) {
-            Log.e(TAG, "exception: $e")
-        }
-    }
-
-    private fun testCborIntData() {
-        val serializer = KotlinxCborSerializer()
-        val testInt = 1337
-        val serializedInt = serializer.serialize(testInt)
-        val deserializedInt = serializer.deserialize(serializedInt, Int::class)
-
-        Log.i(TAG, "testInt = $testInt")
-        Log.i(TAG, "serializedInt = $serializedInt")
-        Log.i(TAG, "deserializedInt = $deserializedInt")
-    }
-
-    private fun testDataStoreProtobufString() {
-        val serializer = DataStoreProtoBufSerializer()
-        val testString = "ISCS EAZY!!!"
-        val serializedData = serializer.serialize(testString)
-        val deserializedData = serializer.deserialize(serializedData, testString::class)
-
-        Log.i(TAG, "testData = $testString")
-        Log.i(TAG, "serializedData = $serializedData")
-        Log.i(TAG, "deserializedData = $deserializedData")
-    }
-
-    private fun testDataStoreProtobufNonSerializableClass() {
-        val serializer = DataStoreProtoBufSerializer()
-        try {
-            val wrongData = WrongData("ISCS EAZY!!!")
-            serializer.serialize(wrongData)
-        } catch (e: Exception) {
-            Log.e(TAG, "exception: $e")
+            Log.i(TAG, "testString = $testString")
+            Log.i(TAG, "retrievedTestString = $retrievedTestString")
         }
     }
 }
