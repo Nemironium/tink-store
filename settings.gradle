@@ -1,2 +1,3 @@
 rootProject.name = "Tink Store"
-include ':app'
+include ':sample'
+include ':store-tink'
