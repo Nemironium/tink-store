@@ -1,12 +1,11 @@
-package io.nemiron.storetk.serializer.datastore
-
+package io.nemiron.storetk.serializer.google
 
 import com.google.protobuf.ExperimentalApi
 import io.nemiron.storetk.core.Data
 import io.nemiron.storetk.serializer.StoreTkSerializer
-import io.nemiron.storetk.serializer.datastore.proto.StoreTkProto.*
-import io.nemiron.storetk.serializer.datastore.proto.toAnyValue
-import io.nemiron.storetk.serializer.datastore.proto.toProtoValue
+import io.nemiron.storetk.serializer.google.proto.StoreTkData
+import io.nemiron.storetk.serializer.google.proto.toAnyValue
+import io.nemiron.storetk.serializer.google.proto.toProtoValue
 import kotlin.reflect.KClass
 
 /*
@@ -16,7 +15,7 @@ import kotlin.reflect.KClass
 object GoogleProtoBufSerializer : StoreTkSerializer {
 
     override fun <T : Any> serialize(value: T): Data {
-        val serializedBytes = StoreTk
+        val serializedBytes = StoreTkData.Data
             .newBuilder()
             .mergeValue(value.toProtoValue())
             .build()
@@ -26,7 +25,7 @@ object GoogleProtoBufSerializer : StoreTkSerializer {
     }
 
     override fun <T : Any> deserialize(data: Data, kClass: KClass<T>): T {
-        return StoreTk
+        return StoreTkData.Data
             .parseFrom(data.value)
             .value
             .toAnyValue(kClass)
