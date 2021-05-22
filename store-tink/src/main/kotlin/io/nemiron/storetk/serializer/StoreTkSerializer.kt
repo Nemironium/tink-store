@@ -1,6 +1,6 @@
 package io.nemiron.storetk.serializer
 
-import io.nemiron.storetk.common.Data
+import io.nemiron.storetk.core.Data
 import kotlin.reflect.KClass
 
 interface StoreTkSerializer {
